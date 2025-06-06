@@ -1,23 +1,23 @@
 # copypasta
 
-copypasta is a [rust-clipboard](https://github.com/aweinstock314/rust-clipboard) fork, adding support for the Wayland clipboard.
+copypwasmta is a [copypasta](https://github.com/alacritty/copypasta) fork, adding browser support for wasm / wasm-bindgen.
 
-rust-clipboard is a cross-platform library for getting and setting the contents of the OS-level clipboard.  
+[copypasta] is a cross-platform library for getting and setting the contents of the OS-level clipboard.
+
+The apis have been changed to async to support the browser interface.
 
 ## Example
 
 ```rust
-extern crate copypasta;
+use copypwasmta::{ClipboardContext, ClipboardProvider};
 
-use copypasta::{ClipboardContext, ClipboardProvider};
-
-fn main() {
+async fn example() {
     let mut ctx = ClipboardContext::new().unwrap();
 
     let msg = "Hello, world!";
-    ctx.set_contents(msg.to_owned()).unwrap();
+    ctx.set_contents(msg.to_owned()).await.unwrap();
 
-    let content = ctx.get_contents().unwrap();
+    let content = ctx.get_contents().await.unwrap();
 
     println!("{}", content);
 }
@@ -28,12 +28,12 @@ fn main() {
 The `ClipboardProvider` trait has the following functions:
 
 ```rust
-fn get_contents(&mut self) -> Result<String, Box<Error>>;
-fn set_contents(&mut self, String) -> Result<(), Box<Error>>;
+async fn get_contents(&mut self) -> Result<String, Box<Error>>;
+async fn set_contents(&mut self, String) -> Result<(), Box<Error>>;
 ```
 
-`ClipboardContext` is a type alias for one of {`WindowsClipboardContext`, `OSXClipboardContext`, `X11ClipboardContext`, `NopClipboardContext`}, all of which implement `ClipboardProvider`. Which concrete type is chosen for `ClipboardContext` depends on the OS (via conditional compilation).
+`ClipboardContext` is a type alias for one of {`WindowsClipboardContext`, `OSXClipboardContext`, `X11ClipboardContext`, `WasmClipboard`, `NopClipboardContext`}, all of which implement `ClipboardProvider`. Which concrete type is chosen for `ClipboardContext` depends on the OS (via conditional compilation).
 
 ## License
 
-`rust-clipboard` is dual-licensed under MIT and Apache2.
+`copypwasmta` is dual-licensed under MIT and Apache2.
