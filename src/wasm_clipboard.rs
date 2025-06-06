@@ -21,7 +21,6 @@ async fn write_text(data: String) {
     if let Err(e) = wasm_bindgen_futures::JsFuture::from(promise).await {
         console::error_1(&format!("Failed to write to clipboard: {:?}", e).into());
     }
-    console::error_1(&format!("worked, actually").into());
 }
 
 impl ClipboardProvider for WasmClipboardContext {
