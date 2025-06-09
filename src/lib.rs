@@ -42,6 +42,9 @@ pub mod x11_clipboard;
 #[cfg(windows)]
 pub mod windows_clipboard;
 
+#[cfg(target_arch = "wasm32")]
+pub mod wasm_clipboard;
+
 #[cfg(target_os = "macos")]
 pub mod osx_clipboard;
 
@@ -66,9 +69,12 @@ pub type ClipboardContext = osx_clipboard::OSXClipboardContext;
 pub type ClipboardContext = nop_clipboard::NopClipboardContext; // TODO: implement AndroidClipboardContext
 #[cfg(target_os = "ios")]
 pub type ClipboardContext = nop_clipboard::NopClipboardContext; // TODO: implement IOSClipboardContext
+#[cfg(target_arch = "wasm32")]
+pub type ClipboardContext = wasm_clipboard::WasmClipboardContext;
 #[cfg(not(any(
     unix,
     windows,
+    target_arch = "wasm32",
     target_os = "macos",
     target_os = "android",
     target_os = "ios",

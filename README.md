@@ -1,8 +1,8 @@
-# copypasta
+# copypwasmta
 
 copypwasmta is a [copypasta](https://github.com/alacritty/copypasta) fork, adding browser support for wasm / wasm-bindgen.
 
-[copypasta] is a cross-platform library for getting and setting the contents of the OS-level clipboard.
+copypasta is a cross-platform library for getting and setting the contents of the OS-level clipboard.
 
 The apis have been changed to async to support the browser interface.
 

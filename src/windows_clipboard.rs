@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use async_trait::async_trait;
 use clipboard_win::{get_clipboard_string, set_clipboard_string};
 
 use crate::common::{ClipboardProvider, Result};
@@ -24,12 +25,13 @@ impl WindowsClipboardContext {
     }
 }
 
+#[async_trait]
 impl ClipboardProvider for WindowsClipboardContext {
-    fn get_contents(&mut self) -> Result<String> {
+    async fn get_contents(&mut self) -> Result<String> {
         Ok(get_clipboard_string()?)
     }
 
-    fn set_contents(&mut self, data: String) -> Result<()> {
+    async fn set_contents(&mut self, data: String) -> Result<()> {
         Ok(set_clipboard_string(&data)?)
     }
 }

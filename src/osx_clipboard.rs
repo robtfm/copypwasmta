@@ -22,6 +22,7 @@ use objc2_app_kit::{NSPasteboard, NSPasteboardTypeFileURL, NSPasteboardTypeStrin
 use objc2_foundation::{NSArray, NSString, NSURL};
 
 use crate::common::*;
+use async_trait::async_trait;
 
 pub struct OSXClipboardContext {
     pasteboard: Retained<NSPasteboard>,
@@ -44,8 +45,9 @@ impl OSXClipboardContext {
     }
 }
 
+#[async_trait]
 impl ClipboardProvider for OSXClipboardContext {
-    fn get_contents(&mut self) -> Result<String> {
+    async fn get_contents(&mut self) -> Result<String> {
         autoreleasepool(|_| {
             let types = unsafe { self.pasteboard.types() }.unwrap();
             let has_file = unsafe { types.containsObject(NSPasteboardTypeFileURL) };
@@ -72,7 +74,7 @@ impl ClipboardProvider for OSXClipboardContext {
         })
     }
 
-    fn set_contents(&mut self, data: String) -> Result<()> {
+    async fn set_contents(&mut self, data: String) -> Result<()> {
         let string_array = NSArray::from_retained_slice(&[ProtocolObject::from_retained(
             NSString::from_str(&data),
         )]);

@@ -13,7 +13,10 @@
 // limitations under the License.
 
 use std::ffi::c_void;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
+use tokio::sync::Mutex;
+
+use async_trait::async_trait;
 
 use smithay_clipboard::Clipboard as WaylandClipboard;
 
@@ -39,25 +42,27 @@ pub unsafe fn create_clipboards_from_external(display: *mut c_void) -> (Primary,
     (Primary { context: context.clone() }, Clipboard { context })
 }
 
+#[async_trait]
 impl ClipboardProvider for Clipboard {
-    fn get_contents(&mut self) -> Result<String> {
-        Ok(self.context.lock().unwrap().load()?)
+    async fn get_contents(&mut self) -> Result<String> {
+        Ok(self.context.lock().await.load()?)
     }
 
-    fn set_contents(&mut self, data: String) -> Result<()> {
-        self.context.lock().unwrap().store(data);
+    async fn set_contents(&mut self, data: String) -> Result<()> {
+        self.context.lock().await.store(data);
 
         Ok(())
     }
 }
 
+#[async_trait]
 impl ClipboardProvider for Primary {
-    fn get_contents(&mut self) -> Result<String> {
-        Ok(self.context.lock().unwrap().load_primary()?)
+    async fn get_contents(&mut self) -> Result<String> {
+        Ok(self.context.lock().await.load_primary()?)
     }
 
-    fn set_contents(&mut self, data: String) -> Result<()> {
-        self.context.lock().unwrap().store_primary(data);
+    async fn set_contents(&mut self, data: String) -> Result<()> {
+        self.context.lock().await.store_primary(data);
 
         Ok(())
     }

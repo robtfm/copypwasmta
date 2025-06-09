@@ -5,7 +5,7 @@ packages:
   - libxkbcommon
 
 sources:
-  - https://github.com/alacritty/copypasta
+  - https://github.com/robtfm/copypwasmta
 
 environment:
   PATH: /home/build/.cargo/bin:/usr/bin/
@@ -14,17 +14,17 @@ tasks:
   - rustup: |
       curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable --profile minimal
   - test: |
-      cd copypasta
+      cd copypwasmta
       cargo test
   - rustfmt: |
-      cd copypasta
+      cd copypwasmta
       rustup toolchain install nightly -c rustfmt
       cargo +nightly fmt -- --check
   - clippy: |
-      cd copypasta
+      cd copypwasmta
       rustup component add clippy
       cargo clippy --all-targets
   - oldstable: |
-      cd copypasta
+      cd copypwasmta
       rustup toolchain install --profile minimal 1.71.0
       cargo +1.71.0 test

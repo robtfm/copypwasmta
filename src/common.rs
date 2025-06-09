@@ -14,13 +14,17 @@
 
 use std::error::Error;
 
+use async_trait::async_trait;
+
 pub type Result<T> = std::result::Result<T, Box<dyn Error + Send + Sync + 'static>>;
 
 // TODO: come up with some platform-agnostic API for richer types
 /// Trait for clipboard access
+#[cfg_attr(target_arch = "wasm32", async_trait(?Send))]
+#[cfg_attr(not(target_arch = "wasm32"), async_trait)]
 pub trait ClipboardProvider: Send {
     /// Method to get the clipboard contents as a String
-    fn get_contents(&mut self) -> Result<String>;
+    async fn get_contents(&mut self) -> Result<String>;
     /// Method to set the clipboard contents as a String
-    fn set_contents(&mut self, _: String) -> Result<()>;
+    async fn set_contents(&mut self, _: String) -> Result<()>;
 }

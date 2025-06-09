@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use async_trait::async_trait;
+
 use crate::common::{ClipboardProvider, Result};
 
 pub struct NopClipboardContext;
@@ -22,8 +24,10 @@ impl NopClipboardContext {
     }
 }
 
+#[cfg_attr(target_arch = "wasm32", async_trait(?Send))]
+#[cfg_attr(not(target_arch = "wasm32"), async_trait)]
 impl ClipboardProvider for NopClipboardContext {
-    fn get_contents(&mut self) -> Result<String> {
+    async fn get_contents(&mut self) -> Result<String> {
         println!(
             "Attempting to get the contents of the clipboard, which hasn't yet been implemented \
              on this platform."
@@ -31,7 +35,7 @@ impl ClipboardProvider for NopClipboardContext {
         Ok("".to_string())
     }
 
-    fn set_contents(&mut self, _: String) -> Result<()> {
+    async fn set_contents(&mut self, _: String) -> Result<()> {
         println!(
             "Attempting to set the contents of the clipboard, which hasn't yet been implemented \
              on this platform."
