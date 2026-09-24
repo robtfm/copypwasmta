@@ -44,6 +44,8 @@ pub mod windows_clipboard;
 
 #[cfg(target_arch = "wasm32")]
 pub mod wasm_clipboard;
+#[cfg(target_arch = "wasm32")]
+pub use wasm_clipboard::{set_external_clipboard, ExternalClipboard};
 
 #[cfg(target_os = "macos")]
 pub mod osx_clipboard;

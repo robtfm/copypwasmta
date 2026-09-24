@@ -34,6 +34,8 @@ async fn set_contents(&mut self, String) -> Result<(), Box<Error>>;
 
 `ClipboardContext` is a type alias for one of {`WindowsClipboardContext`, `OSXClipboardContext`, `X11ClipboardContext`, `WasmClipboard`, `NopClipboardContext`}, all of which implement `ClipboardProvider`. Which concrete type is chosen for `ClipboardContext` depends on the OS (via conditional compilation).
 
+On wasm, `set_external_clipboard` routes clipboard access through functions the embedder supplies, for contexts with no `window` (e.g. a web worker, which has no `navigator.clipboard`).
+
 ## License
 
 `copypwasmta` is dual-licensed under MIT and Apache2.
